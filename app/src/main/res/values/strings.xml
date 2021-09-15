@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Ex_Primer_Parcial</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="escritor">Escritor</string>
+
+    <string name="USUARIO_ESCRITOR">USUARIO_ESCRITOR</string>
+    <string name="USUARIO_LECTOR">USUARIO_LECTOR</string>
+
 </resources>
