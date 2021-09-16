@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 
 class Usuario(
-    var Imagen_Usuario: Foto = Foto.DESCONOCIDO,
+    var Imagen_Usuario: Foto = Foto.ESCRITOR_ZHONGLI,
     var Nombre_Usuario: String = "",
     var Contra: String = "",
     var Nivel: Nivel_Usuario = Nivel_Usuario.LECTOR,

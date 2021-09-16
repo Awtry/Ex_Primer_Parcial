@@ -23,9 +23,10 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     private lateinit var lbl_Usuario: TextView
     private lateinit var lbl_Num_Art: TextView
     private lateinit var Detalle_text: TextView
+    private lateinit var lbl_Titulo_Libro: TextView
 
-    private lateinit var Imagen_Usuario: ImageView
-    private lateinit var Imagen_Muestra: ImageView
+    private lateinit var Img_Usuario: ImageView
+    private lateinit var Img_Muestra: ImageView
 
     private lateinit var btn_IZQ: Button
     private lateinit var btn_DER: Button
@@ -34,18 +35,23 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     private lateinit var btn_Cora: Button
 
     private lateinit var usuario: Usuario
+    private lateinit var libros: Libros
+
+    private lateinit var vista_libros: ArrayList<Libros>
+    private var centinela = 1
 
     //endregion
 
-    private fun Inicializar_Vista(){
+    private fun Inicializar_Vista() {
         lbl_titulo = requireView().findViewById(R.id.lblTitulo)
         lbl_Apodo = requireView().findViewById(R.id.lblNickname)
         lbl_Usuario = requireView().findViewById(R.id.lblTipoUsuario)
         lbl_Num_Art = requireView().findViewById(R.id.lblNumArticulos)
         Detalle_text = requireView().findViewById(R.id.Txv_Detalle_Noedit)
+        lbl_Titulo_Libro = requireView().findViewById(R.id.lblTitulo_Libro)
 
-        Imagen_Usuario = requireView().findViewById(R.id.ImgView_General)
-        Imagen_Muestra = requireView().findViewById(R.id.Foto_Muestra)
+        Img_Usuario = requireView().findViewById(R.id.ImgView_General)
+        Img_Muestra = requireView().findViewById(R.id.Foto_Muestra)
 
         btn_IZQ = requireView().findViewById(R.id.btn_IZQ)
         btn_DER = requireView().findViewById(R.id.btn_DER)
@@ -54,21 +60,59 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         btn_Cora = requireView().findViewById(R.id.btn_Corazon)
 
         usuario = requireArguments().getParcelable("DATOSALIDA") ?: Usuario()
+        libros = Libros()
+
 
         Mostrar_Datos()
+        Disparador_Boton()
     }
 
 
-    private fun Mostrar_Datos(){
+    private fun Mostrar_Datos() {
         lbl_titulo.setText(usuario.Nivel.text)
         lbl_Apodo.setText(usuario.Nombre_Usuario)
         lbl_Usuario.setText(usuario.Nivel.text)
+        Img_Usuario.setImageResource(usuario.Imagen_Usuario.text)
 
-        if (usuario.Art_fav == null){
+        Img_Muestra.setImageResource(libros.Imagen_Libro.text)
+
+        vista_libros = libros.conteoLibros()
+
+        lbl_Titulo_Libro.setText(libros.Titulo)
+        Detalle_text.setText(libros.Detalle)
+
+        if (usuario.Art_fav == null) {
             lbl_Num_Art.setText("No hay articulos  favoritos")
-        }else{
+        } else {
             lbl_Num_Art.setText(usuario.Art_fav.toString())
         }
+    }
+
+    private fun Disparador_Boton() {
+        btn_DER.setOnClickListener {
+            if (centinela == vista_libros.size - 1) {
+                centinela = 0
+            } else {
+                centinela++
+            }
+
+            Rotacion_IMG()
+        }
+
+        btn_IZQ.setOnClickListener {
+            if (centinela == 0) {
+                centinela = vista_libros.size - 1
+            } else {
+                centinela--
+            }
+            Rotacion_IMG()
+        }
+    }
+
+    private fun Rotacion_IMG() {
+        Img_Muestra.setImageResource(vista_libros[centinela].Imagen_Libro.text)
+        lbl_Titulo_Libro.setText(vista_libros[centinela].Titulo)
+        Detalle_text.setText(vista_libros[centinela].Detalle)
     }
 
 
