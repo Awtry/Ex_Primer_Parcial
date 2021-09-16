@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isGone
 
 class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
 
@@ -28,6 +29,9 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
     private lateinit var txv_Titulo: TextView
     private lateinit var txv_Detalle: TextView
 
+    private lateinit var libros: Libros
+    private lateinit var usuario: Usuario
+
     //endregion
 
     private fun Inicializador_Vista(){
@@ -39,9 +43,22 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         txv_Titulo = requireView().findViewById(R.id.Txv_Titulo_Noedit)
         txv_Detalle = requireView().findViewById(R.id.Txv_Detalle_Noedit)
 
+        libros = requireArguments().getParcelable("LibroSeleccionado") ?: Libros()
+        usuario = requireArguments().getParcelable("UsuarioSeleccionado") ?: Usuario()
 
+        MostrarDatos()
     }
 
+    private fun MostrarDatos(){
+        Imagen_Detalle.setImageResource(libros.Imagen_Libro.text)
+        txv_Titulo.setText(libros.Titulo)
+        txv_Detalle.setText(libros.Detalle)
+
+        if (usuario.Nivel == Nivel_Usuario.LECTOR){
+            btn_DER.isGone = true
+            btn_IZQ.isGone = true
+        }
+    }
 
 
 }

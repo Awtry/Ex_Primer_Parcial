@@ -17,12 +17,12 @@ class Usuario(
 
     companion object{
         val usuarios = arrayOf(
-            Usuario(Foto.ESCRITOR_ZHONGLI,"Zhongli","123",Nivel_Usuario.LECTOR, null),
+            Usuario(Foto.ESCRITOR_ZHONGLI,"Zhongli","123",Nivel_Usuario.ESCRITOR, null),
             Usuario(Foto.ESCRITOR_ALBEDO,"Albedo","456",Nivel_Usuario.ESCRITOR, null),
             Usuario(Foto.ESCRITOR_NINGGUANG,"Ningguang","789",Nivel_Usuario.ESCRITOR, null),
-            Usuario(Foto.LECTOR_DILUC,"Diluc","987",Nivel_Usuario.ESCRITOR, null),
-            Usuario(Foto.LECTOR_SUCROSE,"Sucrose","654",Nivel_Usuario.ESCRITOR, null),
-            Usuario(Foto.LECTOR_XINGQIU,"Xingqiu","321",Nivel_Usuario.ESCRITOR, null)
+            Usuario(Foto.LECTOR_DILUC,"Diluc","987",Nivel_Usuario.LECTOR, null),
+            Usuario(Foto.LECTOR_SUCROSE,"Sucrose","654",Nivel_Usuario.LECTOR, null),
+            Usuario(Foto.LECTOR_XINGQIU,"Xingqiu","321",Nivel_Usuario.LECTOR, null)
         )
     }
 

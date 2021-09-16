@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isGone
 
 class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
@@ -69,17 +70,25 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
 
     private fun Mostrar_Datos() {
+
         lbl_titulo.setText(usuario.Nivel.text)
         lbl_Apodo.setText(usuario.Nombre_Usuario)
         lbl_Usuario.setText(usuario.Nivel.text)
         Img_Usuario.setImageResource(usuario.Imagen_Usuario.text)
 
-        Img_Muestra.setImageResource(libros.Imagen_Libro.text)
+        if (usuario.Nivel == Nivel_Usuario.LECTOR){
+            btn_Agrega.isGone = true
+            btn_Elimina.isGone = true
+            btn_Cora.isGone = true
+        }
 
         vista_libros = libros.conteoLibros()
 
-        lbl_Titulo_Libro.setText(libros.Titulo)
-        Detalle_text.setText(libros.Detalle)
+        Img_Muestra.setImageResource(vista_libros[centinela].Imagen_Libro.text)
+        lbl_Titulo_Libro.setText(vista_libros[centinela].Titulo)
+        Detalle_text.setText(vista_libros[centinela].Detalle)
+
+
 
         if (usuario.Art_fav == null) {
             lbl_Num_Art.setText("No hay articulos  favoritos")
@@ -106,6 +115,15 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
                 centinela--
             }
             Rotacion_IMG()
+        }
+
+        Img_Muestra.setOnClickListener{
+            (requireActivity() as MainActivity).replaceFragment(Frag_Detalle().apply {
+                arguments = Bundle().apply {
+                    putParcelable("LibroSeleccionado", vista_libros[centinela])
+                    putParcelable("UsuarioSeleccionado", usuario)
+                }
+            })
         }
     }
 
