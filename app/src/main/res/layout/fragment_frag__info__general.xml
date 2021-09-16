@@ -18,8 +18,8 @@
             android:layout_height="50dp"
             android:layout_margin="25dp"
             android:fontFamily="serif-monospace"
-
-            android:text="@string/escritor"
+            android:textStyle="bold"
+            android:textSize="20dp"
 
             app:layout_constraintBottom_toTopOf="@id/lblNickname"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,6 +32,7 @@
             android:layout_height="150dp"
 
             android:layout_marginTop="20dp"
+            android:textStyle="bold"
 
             app:layout_constraintEnd_toStartOf="@id/lblNickname"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,9 +43,12 @@
             android:id="@+id/lblNickname"
             android:layout_width="150dp"
             android:layout_height="30dp"
+            android:layout_marginTop="25dp"
 
-            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:textStyle="bold"
 
+            android:fontFamily="serif-monospace"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ImgView_General"
             app:layout_constraintTop_toBottomOf="@id/lblTitulo" />
@@ -54,6 +58,10 @@
             android:layout_width="150dp"
             android:layout_height="30dp"
 
+            android:textSize="18dp"
+            android:textStyle="bold"
+
+            android:fontFamily="serif-monospace"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ImgView_General"
@@ -64,6 +72,10 @@
             android:layout_width="150dp"
             android:layout_height="30dp"
 
+            android:textSize="18dp"
+            android:textStyle="bold"
+
+            android:fontFamily="serif-monospace"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ImgView_General"

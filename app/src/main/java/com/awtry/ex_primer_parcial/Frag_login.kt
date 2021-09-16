@@ -14,6 +14,7 @@ class Frag_login : Fragment(R.layout.fragment_frag_login) {
     override fun onResume() {
         super.onResume()
 
+        Inicializador_Vista()
     }
 
     //region Elementos de vista
@@ -27,14 +28,35 @@ class Frag_login : Fragment(R.layout.fragment_frag_login) {
     //endregion
 
     private fun Inicializador_Vista(){
-        usuario = requireArguments().getParcelable("USUARIOS") ?: Usuario()
+       // usuario = requireArguments().getParcelable("USUARIOS") ?: Usuario()
 
+        usuario = Usuario()
         Img_login = requireView().findViewById(R.id.ImgView_Login)
         txt_Usuario = requireView().findViewById(R.id.txt_user)
         txt_Contra = requireView().findViewById(R.id.txt_password)
         btn_Accesar = requireView().findViewById(R.id.btn_Access)
 
+        Accion_Boton()
+    }
 
+    private fun Lector_Datos(){
+       usuario.validarUsuario()?.let {
+           (requireActivity() as MainActivity).replaceFragment(Frag_Info_General().apply {
+               arguments = Bundle().apply {
+                   putParcelable("DATOSALIDA", it)
+               }
+           })
+       }
+    }
+
+    private fun Accion_Boton(){
+        btn_Accesar.setOnClickListener{
+            usuario.apply {
+                Nombre_Usuario = txt_Usuario.text.toString()
+                Contra = txt_Contra.text.toString()
+            }
+            Lector_Datos()
+        }
     }
 
 }

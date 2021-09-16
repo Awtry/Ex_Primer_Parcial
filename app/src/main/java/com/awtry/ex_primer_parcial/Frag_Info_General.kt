@@ -13,6 +13,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
     override fun onResume() {
         super.onResume()
+        Inicializar_Vista()
     }
 
     //region Elementos de vista
@@ -32,6 +33,8 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     private lateinit var btn_Elimina: Button
     private lateinit var btn_Cora: Button
 
+    private lateinit var usuario: Usuario
+
     //endregion
 
     private fun Inicializar_Vista(){
@@ -50,6 +53,22 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         btn_Elimina = requireView().findViewById(R.id.btn_Eliminar)
         btn_Cora = requireView().findViewById(R.id.btn_Corazon)
 
+        usuario = requireArguments().getParcelable("DATOSALIDA") ?: Usuario()
+
+        Mostrar_Datos()
+    }
+
+
+    private fun Mostrar_Datos(){
+        lbl_titulo.setText(usuario.Nivel.text)
+        lbl_Apodo.setText(usuario.Nombre_Usuario)
+        lbl_Usuario.setText(usuario.Nivel.text)
+
+        if (usuario.Art_fav == null){
+            lbl_Num_Art.setText("No hay articulos  favoritos")
+        }else{
+            lbl_Num_Art.setText(usuario.Art_fav.toString())
+        }
     }
 
 

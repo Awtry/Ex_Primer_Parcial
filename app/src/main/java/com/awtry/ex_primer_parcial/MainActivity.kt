@@ -2,6 +2,7 @@ package com.awtry.ex_primer_parcial
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
     private val KEY = "STATE_KEY"
@@ -23,6 +24,12 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 
-
+    fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.Padre, fragment)
+            addToBackStack(fragment.tag)
+            commit()
+        }
+    }
 
 }

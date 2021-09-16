@@ -13,6 +13,7 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
 
     override fun onResume() {
         super.onResume()
+        Inicializador_Vista()
     }
 
     //region Elementos de vista
@@ -37,6 +38,10 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         Imagen_Detalle = requireView().findViewById(R.id.Foto_Muestra_Detalle)
         txv_Titulo = requireView().findViewById(R.id.Txv_Titulo_Noedit)
         txv_Detalle = requireView().findViewById(R.id.Txv_Detalle_Noedit)
+
+
     }
+
+
 
 }
