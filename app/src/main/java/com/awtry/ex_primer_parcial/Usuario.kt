@@ -16,7 +16,7 @@ class Usuario(
 ): Parcelable {
 
     companion object{
-        val usuarios = arrayOf(
+        val usuarios = arrayListOf(
             Usuario(Foto.ESCRITOR_ZHONGLI,"Zhongli","123",Nivel_Usuario.ESCRITOR, null),
             Usuario(Foto.ESCRITOR_ALBEDO,"Albedo","456",Nivel_Usuario.ESCRITOR, null),
             Usuario(Foto.ESCRITOR_NINGGUANG,"Ningguang","789",Nivel_Usuario.ESCRITOR, null),
@@ -26,8 +26,8 @@ class Usuario(
         )
     }
 
-    fun validarUsuario() = usuarios.firstOrNull { (it.Nombre_Usuario == this.Nombre_Usuario && it.Contra == this.Contra)
+    fun validarUsuario() = usuarios.firstOrNull { (it.Nombre_Usuario == this.Nombre_Usuario && it.Contra == this.Contra)}
 
-    }
+    fun cuentaUsuarios() = usuarios
 
 }

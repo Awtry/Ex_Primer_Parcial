@@ -1,5 +1,7 @@
 package com.awtry.ex_primer_parcial
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +20,9 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     }
 
     //region Elementos de vista
+
+    private lateinit var preferences: SharedPreferences
+    private val PREFS = "MY_PREFERENCES"
 
     private lateinit var lbl_titulo: TextView
     private lateinit var lbl_Apodo: TextView
@@ -60,6 +65,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         btn_Elimina = requireView().findViewById(R.id.btn_Eliminar)
         btn_Cora = requireView().findViewById(R.id.btn_Corazon)
 
+        preferences = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         usuario = requireArguments().getParcelable("DATOSALIDA") ?: Usuario()
         libros = Libros()
 
