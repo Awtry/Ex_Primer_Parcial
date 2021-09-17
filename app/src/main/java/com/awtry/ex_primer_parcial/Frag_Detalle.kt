@@ -1,10 +1,6 @@
 package com.awtry.ex_primer_parcial
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,7 +25,7 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
     private lateinit var txv_Titulo: TextView
     private lateinit var txv_Detalle: TextView
 
-    private lateinit var libros: Libros
+    private lateinit var generos: Generos
     private lateinit var usuario: Usuario
 
     //endregion
@@ -43,16 +39,16 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         txv_Titulo = requireView().findViewById(R.id.Txv_Titulo_Noedit)
         txv_Detalle = requireView().findViewById(R.id.Txv_Detalle_Noedit)
 
-        libros = requireArguments().getParcelable("LibroSeleccionado") ?: Libros()
+        generos = requireArguments().getParcelable("LibroSeleccionado") ?: Generos()
         usuario = requireArguments().getParcelable("UsuarioSeleccionado") ?: Usuario()
 
         MostrarDatos()
     }
 
     private fun MostrarDatos(){
-        Imagen_Detalle.setImageResource(libros.Imagen_Libro.text)
-        txv_Titulo.setText(libros.Titulo)
-        txv_Detalle.setText(libros.Detalle)
+        Imagen_Detalle.setImageResource(generos.Imagen_Libro.text)
+        txv_Titulo.setText(generos.Titulo)
+        txv_Detalle.setText(generos.Detalle)
 
         if (usuario.Nivel == Nivel_Usuario.LECTOR){
             btn_DER.isGone = true

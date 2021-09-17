@@ -9,24 +9,24 @@ import kotlinx.parcelize.Parcelize
 
 class Usuario(
     var Imagen_Usuario: Foto = Foto.ESCRITOR_ZHONGLI,
-    var Nombre_Usuario: String = "",
-    var Contra: String = "",
+    var persona: Persona = Persona.USUARIO_VACIO,
+    //var Nombre_Usuario: String = "",
+    //var Contra: String = "",
     var Nivel: Nivel_Usuario = Nivel_Usuario.LECTOR,
-    var Art_fav: Int? = null
 ): Parcelable {
 
     companion object{
         val usuarios = arrayListOf(
-            Usuario(Foto.ESCRITOR_ZHONGLI,"Zhongli","123",Nivel_Usuario.ESCRITOR, null),
-            Usuario(Foto.ESCRITOR_ALBEDO,"Albedo","456",Nivel_Usuario.ESCRITOR, null),
-            Usuario(Foto.ESCRITOR_NINGGUANG,"Ningguang","789",Nivel_Usuario.ESCRITOR, null),
-            Usuario(Foto.LECTOR_DILUC,"Diluc","987",Nivel_Usuario.LECTOR, null),
-            Usuario(Foto.LECTOR_SUCROSE,"Sucrose","654",Nivel_Usuario.LECTOR, null),
-            Usuario(Foto.LECTOR_XINGQIU,"Xingqiu","321",Nivel_Usuario.LECTOR, null)
+            Usuario(Foto.ESCRITOR_ZHONGLI, Persona.ESCRITOR_ZHONGLI, Nivel_Usuario.ESCRITOR),
+            Usuario(Foto.ESCRITOR_ALBEDO, Persona.ESCRITOR_ALBEDO ,Nivel_Usuario.ESCRITOR),
+            Usuario(Foto.ESCRITOR_NINGGUANG,Persona.ESCRITOR_NINGGUANG,Nivel_Usuario.ESCRITOR),
+            Usuario(Foto.LECTOR_DILUC,Persona.LECTOR_DILUC,Nivel_Usuario.LECTOR),
+            Usuario(Foto.LECTOR_SUCROSE,Persona.LECTOR_SUCROSE,Nivel_Usuario.LECTOR),
+            Usuario(Foto.LECTOR_XINGQIU,Persona.LECTOR_XINGQIU,Nivel_Usuario.LECTOR)
         )
     }
 
-    fun validarUsuario() = usuarios.firstOrNull { (it.Nombre_Usuario == this.Nombre_Usuario && it.Contra == this.Contra)}
+    fun validarUsuario() = usuarios.firstOrNull { (it.persona.username == this.persona.username && it.persona.password == this.persona.password)}
 
     fun cuentaUsuarios() = usuarios
 

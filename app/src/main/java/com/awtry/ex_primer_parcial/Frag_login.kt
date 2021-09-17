@@ -6,9 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -35,6 +32,7 @@ class Frag_login : Fragment(R.layout.fragment_frag_login) {
     private lateinit var usuario: Usuario
     private lateinit var listUsuario: ArrayList<Usuario>
     private var centinela = 0
+    private var lugar: Int = 0
 
     //endregion
 
@@ -64,8 +62,8 @@ class Frag_login : Fragment(R.layout.fragment_frag_login) {
             Toast.makeText(activity, "Sin datos, escribeme los datos", Toast.LENGTH_SHORT).show();
         } else {
             usuario.apply {
-                Nombre_Usuario = preferences.getString("USUARIO", "")!!
-                Contra = preferences.getString("CONTRA", "")!!
+                persona.username = preferences.getString("USUARIO", "")!!
+                persona.password = preferences.getString("CONTRA", "")!!
             }
             Lector_Datos()
         }
@@ -81,26 +79,28 @@ class Frag_login : Fragment(R.layout.fragment_frag_login) {
         }
     }
 
-    private fun Accion_Boton() {
-        btn_Accesar.setOnClickListener {
-            if(txt_Contra.text.toString() == listUsuario[centinela].Contra ){
-                usuario.apply {
-                    Nombre_Usuario = txt_Usuario.text.toString()
-                    Contra = txt_Contra.text.toString()
+    private fun VerificarInicio(lugar: Int){
+        if(txt_Contra.text.toString() == listUsuario[lugar].persona.password ){
+            usuario.apply {
+                persona.username = txt_Usuario.text.toString()
+                persona.password = txt_Contra.text.toString()
 
-                    editor = preferences.edit()
-                    editor.putString("USUARIO", Nombre_Usuario)
-                    editor.putString("CONTRA", Contra)
-                    editor.apply()
-                }
-            }else{
-                Toast.makeText(activity, "Contraseña erronea", Toast.LENGTH_SHORT)
-                    .show();
+                editor = preferences.edit()
+                editor.putString("USUARIO", usuario.persona.username)
+                editor.putString("CONTRA", usuario.persona.password)
+                editor.apply()
             }
+        }else{
+            Toast.makeText(activity, "Contraseña erronea", Toast.LENGTH_SHORT)
+                .show();
+        }
+        Lector_Datos()
+    }
 
-
-
-            Lector_Datos()
+    private fun Accion_Boton() {
+        println(centinela)
+        btn_Accesar.setOnClickListener {
+            VerificarInicio(lugar)
         }
     }
 
@@ -121,12 +121,13 @@ class Frag_login : Fragment(R.layout.fragment_frag_login) {
         override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
             if (listUsuario.size >= 0) {
                 for (centinela in 0..listUsuario.size - 1) {
-                    if (txt_Usuario.text.toString() == listUsuario[centinela].Nombre_Usuario) {
+                    if (txt_Usuario.text.toString() == listUsuario[centinela].persona.username) {
                         Img_login.setImageResource(listUsuario[centinela].Imagen_Usuario.text)
+                        lugar = centinela
                         break
                     }
                     if (txt_Usuario.text.isEmpty() ||
-                        txt_Usuario.text.toString() != listUsuario[centinela].Nombre_Usuario
+                        txt_Usuario.text.toString() != listUsuario[centinela].persona.username
                     ) {
                         Img_login.setImageResource(R.drawable.ic_read)
                     }

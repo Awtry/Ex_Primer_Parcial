@@ -4,9 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -43,14 +40,19 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     private lateinit var btn_Logout: Button
 
     private lateinit var usuario: Usuario
-    private lateinit var libros: Libros
+    private lateinit var generos: Generos
+    private lateinit var escritor: Detalle_Escritor
 
-    private lateinit var vista_libros: ArrayList<Libros>
-    private var centinela = 1
+    private lateinit var vista_libros: ArrayList<Generos>
+    private lateinit var lista_articulos: MutableList<Detalle_Escritor>
+    private var centinela = 0
 
     //endregion
 
     private fun Inicializar_Vista() {
+        generos = Generos()
+        escritor = Detalle_Escritor()
+
         lbl_titulo = requireView().findViewById(R.id.lblTitulo)
         lbl_Apodo = requireView().findViewById(R.id.lblNickname)
         lbl_Usuario = requireView().findViewById(R.id.lblTipoUsuario)
@@ -70,7 +72,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
         preferences = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         usuario = requireArguments().getParcelable("DATOSALIDA") ?: Usuario()
-        libros = Libros()
+
 
 
         Mostrar_Datos()
@@ -81,7 +83,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     private fun Mostrar_Datos() {
 
         lbl_titulo.setText(usuario.Nivel.text)
-        lbl_Apodo.setText(usuario.Nombre_Usuario)
+        lbl_Apodo.setText(usuario.persona.username)
         lbl_Usuario.setText(usuario.Nivel.text)
         Img_Usuario.setImageResource(usuario.Imagen_Usuario.text)
 
@@ -93,24 +95,31 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
             btn_Cora.isGone = true
         }
 
-        vista_libros = libros.conteoLibros()
+        articulosEscritor(usuario.persona)
 
-        Img_Muestra.setImageResource(vista_libros[centinela].Imagen_Libro.text)
-        lbl_Titulo_Libro.setText(vista_libros[centinela].Titulo)
-        Detalle_text.setText(vista_libros[centinela].Detalle)
+        vista_libros = generos.conteoGeneros()
+        lista_articulos = escritor.Articulos_aislados()
+
+        Img_Muestra.setImageResource(lista_articulos[centinela].foto_genero.text)
+        lbl_Titulo_Libro.setText(lista_articulos[centinela].titulo)
+        Detalle_text.setText(lista_articulos[centinela].descripcion)
 
 
-
+/*
         if (usuario.Art_fav == null) {
             lbl_Num_Art.setText("No hay articulos  favoritos")
         } else {
             lbl_Num_Art.setText(usuario.Art_fav.toString())
-        }
+        }*/
+    }
+
+    private fun articulosEscritor(persona: Persona){
+        escritor.Escritor_Seleccionado(persona)
     }
 
     private fun Disparador_Boton() {
         btn_DER.setOnClickListener {
-            if (centinela == vista_libros.size - 1) {
+            if (centinela == lista_articulos.size - 1) {
                 centinela = 0
             } else {
                 centinela++
@@ -121,7 +130,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
         btn_IZQ.setOnClickListener {
             if (centinela == 0) {
-                centinela = vista_libros.size - 1
+                centinela = lista_articulos.size - 1
             } else {
                 centinela--
             }
@@ -138,6 +147,8 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         }
 
         btn_Logout.setOnClickListener{
+            //usuario.
+            lista_articulos.clear()
             editor = preferences.edit()
             editor.clear()
             editor.apply()
@@ -146,9 +157,9 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     }
 
     private fun Rotacion_IMG() {
-        Img_Muestra.setImageResource(vista_libros[centinela].Imagen_Libro.text)
-        lbl_Titulo_Libro.setText(vista_libros[centinela].Titulo)
-        Detalle_text.setText(vista_libros[centinela].Detalle)
+        Img_Muestra.setImageResource(lista_articulos[centinela].foto_genero.text)
+        lbl_Titulo_Libro.setText(lista_articulos[centinela].titulo)
+        Detalle_text.setText(lista_articulos[centinela].descripcion)
     }
 
 
