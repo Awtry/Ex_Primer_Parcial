@@ -23,6 +23,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
     private lateinit var preferences: SharedPreferences
     private val PREFS = "MY_PREFERENCES"
+    private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var lbl_titulo: TextView
     private lateinit var lbl_Apodo: TextView
@@ -39,6 +40,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     private lateinit var btn_Agrega: Button
     private lateinit var btn_Elimina: Button
     private lateinit var btn_Cora: Button
+    private lateinit var btn_Logout: Button
 
     private lateinit var usuario: Usuario
     private lateinit var libros: Libros
@@ -64,6 +66,7 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         btn_Agrega = requireView().findViewById(R.id.btn_Agregar)
         btn_Elimina = requireView().findViewById(R.id.btn_Eliminar)
         btn_Cora = requireView().findViewById(R.id.btn_Corazon)
+        btn_Logout = requireView().findViewById(R.id.btnLogout)
 
         preferences = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         usuario = requireArguments().getParcelable("DATOSALIDA") ?: Usuario()
@@ -85,6 +88,8 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         if (usuario.Nivel == Nivel_Usuario.LECTOR){
             btn_Agrega.isGone = true
             btn_Elimina.isGone = true
+            Detalle_text.isGone = true
+        }else{
             btn_Cora.isGone = true
         }
 
@@ -130,6 +135,13 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
                     putParcelable("UsuarioSeleccionado", usuario)
                 }
             })
+        }
+
+        btn_Logout.setOnClickListener{
+            editor = preferences.edit()
+            editor.clear()
+            editor.apply()
+            (requireActivity() as MainActivity).replaceFragment(Frag_login().apply { })
         }
     }
 

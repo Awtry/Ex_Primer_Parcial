@@ -6,5 +6,9 @@
 
     <string name="USUARIO_ESCRITOR">Escritor</string>
     <string name="USUARIO_LECTOR">Lector</string>
+    <string name="cerrar_sesi_n">Cerrar sesión</string>
+
+    <string name="CAMPO_INCOMPLETO">Campo incompleto</string>
+    <string name="ACCESA">Accesar</string>
 
 </resources>

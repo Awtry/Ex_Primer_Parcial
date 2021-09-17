@@ -57,6 +57,7 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         if (usuario.Nivel == Nivel_Usuario.LECTOR){
             btn_DER.isGone = true
             btn_IZQ.isGone = true
+            btn_Confirm.isGone = true
         }
     }
 

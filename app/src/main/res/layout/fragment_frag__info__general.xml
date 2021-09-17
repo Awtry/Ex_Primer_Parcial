@@ -12,6 +12,19 @@
         android:layout_height="match_parent">
 
 
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/cerrar_sesi_n"
+            android:textSize="10dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/lblTitulo"
+            app:layout_constraintBottom_toTopOf="@id/ImgView_General"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
         <TextView
             android:id="@+id/lblTitulo"
             android:layout_width="wrap_content"
