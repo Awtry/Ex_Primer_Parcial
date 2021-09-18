@@ -11,4 +11,7 @@
     <string name="CAMPO_INCOMPLETO">Campo incompleto</string>
     <string name="ACCESA">Accesar</string>
 
+    <string name="TITULO_VACIO">Titulo vacío</string>
+    <string name="DESCRIPCION_VACIA">Descripcion vacía</string>
+
 </resources>

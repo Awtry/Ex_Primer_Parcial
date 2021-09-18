@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isGone
+import com.squareup.moshi.Moshi
+import java.lang.Exception
 
 class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
@@ -19,8 +22,10 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
     //region Elementos de vista
 
     private lateinit var preferences: SharedPreferences
-    private val PREFS = "MY_PREFERENCES"
     private lateinit var editor: SharedPreferences.Editor
+    private val PREFS = "MY_PREFERENCES"
+   // private val DETALLE_LISTA = "DETALLE_LISTA"
+
 
     private lateinit var lbl_titulo: TextView
     private lateinit var lbl_Apodo: TextView
@@ -45,13 +50,17 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
 
     private lateinit var vista_libros: ArrayList<Generos>
     private lateinit var lista_articulos: MutableList<Detalle_Escritor>
+    private val moshi = Moshi.Builder().build()
+
     private var centinela = 0
 
     //endregion
 
     private fun Inicializar_Vista() {
+
+        preferences = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        escritor = Lectura_sharepreference()
         generos = Generos()
-        escritor = Detalle_Escritor()
 
         lbl_titulo = requireView().findViewById(R.id.lblTitulo)
         lbl_Apodo = requireView().findViewById(R.id.lblNickname)
@@ -70,9 +79,10 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         btn_Cora = requireView().findViewById(R.id.btn_Corazon)
         btn_Logout = requireView().findViewById(R.id.btnLogout)
 
-        preferences = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        usuario = requireArguments().getParcelable("DATOSALIDA") ?: Usuario()
 
+        usuario = requireArguments().getParcelable("DATOSALIDA") ?: Usuario()
+        //escritor = requireArguments().getParcelable("ESCRITOR") ?: Detalle_Escritor()
+        //Guardar_arrglo(escritor)
 
 
         Mostrar_Datos()
@@ -91,26 +101,73 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
             btn_Agrega.isGone = true
             btn_Elimina.isGone = true
             Detalle_text.isGone = true
+            Verificador_Lector()
         }else{
             btn_Cora.isGone = true
+            Verificador_Escritor()
         }
 
         articulosEscritor(usuario.persona)
 
         vista_libros = generos.conteoGeneros()
         lista_articulos = escritor.Articulos_aislados()
-
-        Img_Muestra.setImageResource(lista_articulos[centinela].foto_genero.text)
-        lbl_Titulo_Libro.setText(lista_articulos[centinela].titulo)
-        Detalle_text.setText(lista_articulos[centinela].descripcion)
+        //Guardar_arrglo(escritor)
 
 
-/*
-        if (usuario.Art_fav == null) {
-            lbl_Num_Art.setText("No hay articulos  favoritos")
+
+    }
+
+    /*private fun Guardar_arrglo(Salida: Detalle_Escritor?){
+        preferences.edit().putString(DETALLE_LISTA, moshi.adapter(Detalle_Escritor::class.java).toJson(Salida)).apply()
+    }*/
+
+    private fun Lectura_sharepreference() =
+        preferences.getString("DETALLE_LISTA", null)?.let{
+            return@let try{
+                moshi.adapter(Detalle_Escritor::class.java).fromJson(it)
+            }catch (e: Exception){
+                Detalle_Escritor()
+            }
+        } ?: Detalle_Escritor()
+
+    private fun Verificador_Lector(){
+        if (vista_libros.isEmpty()){
+            Img_Muestra.setImageResource(Foto.LIBRO_DESCONOCIDO.text)
+            lbl_Titulo_Libro.setText(R.string.TITULO_VACIO)
+            Detalle_text.setText(R.string.DESCRIPCION_VACIA)
+        }else{
+            Img_Muestra.setImageResource(vista_libros[centinela].Imagen_Libro.text)
+            lbl_Titulo_Libro.setText(vista_libros[centinela].Titulo)
+            Detalle_text.setText(vista_libros[centinela].Detalle)
+        }
+
+
+        if (escritor.Articulos_aislados().isEmpty()) {
+            lbl_Num_Art.setText("Articulos: " + escritor.Articulos_aislados().size)
         } else {
-            lbl_Num_Art.setText(usuario.Art_fav.toString())
-        }*/
+            lbl_Num_Art.setText("Articulos: " + escritor.Articulos_aislados().size.toString())
+        }
+    }
+
+
+    private fun Verificador_Escritor(){
+
+        if (lista_articulos.isEmpty()){
+            Img_Muestra.setImageResource(Foto.LIBRO_DESCONOCIDO.text)
+            lbl_Titulo_Libro.setText(R.string.TITULO_VACIO)
+            Detalle_text.setText(R.string.DESCRIPCION_VACIA)
+        }else{
+            Img_Muestra.setImageResource(lista_articulos[centinela].foto_genero.text)
+            lbl_Titulo_Libro.setText(lista_articulos[centinela].titulo)
+            Detalle_text.setText(lista_articulos[centinela].descripcion)
+        }
+
+
+        if (escritor.Articulos_aislados().isEmpty()) {
+            lbl_Num_Art.setText("Articulos: " + escritor.Articulos_aislados().size)
+        } else {
+            lbl_Num_Art.setText("Articulos: " + escritor.Articulos_aislados().size.toString())
+        }
     }
 
     private fun articulosEscritor(persona: Persona){
@@ -138,12 +195,19 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
         }
 
         Img_Muestra.setOnClickListener{
-            (requireActivity() as MainActivity).replaceFragment(Frag_Detalle().apply {
-                arguments = Bundle().apply {
-                    putParcelable("LibroSeleccionado", vista_libros[centinela])
-                    putParcelable("UsuarioSeleccionado", usuario)
-                }
-            })
+            if(lista_articulos.isEmpty()){
+                Toast.makeText(activity, "No tienes articulos " + usuario.persona.username, Toast.LENGTH_SHORT)
+                    .show();
+            }else{
+                (requireActivity() as MainActivity).replaceFragment(Frag_Detalle().apply {
+                    arguments = Bundle().apply {
+                        putParcelable("LibroSeleccionado", lista_articulos[centinela])
+                        putParcelable("UsuarioSeleccionado", usuario )
+                        putInt("elemento", centinela )
+
+                    }
+                })
+            }
         }
 
         btn_Logout.setOnClickListener{
@@ -154,12 +218,31 @@ class Frag_Info_General : Fragment(R.layout.fragment_frag__info__general) {
             editor.apply()
             (requireActivity() as MainActivity).replaceFragment(Frag_login().apply { })
         }
+
+        btn_Agrega.setOnClickListener(){
+            (requireActivity() as MainActivity).replaceFragment(Frag_Detalle().apply {
+                arguments = Bundle().apply {
+                    putParcelable("UsuarioSeleccionado", usuario)
+                    putParcelable("NuevoArticulo", vista_libros[centinela])
+                }
+            })
+        }
+
+        btn_Elimina.setOnClickListener(){
+
+        }
     }
 
     private fun Rotacion_IMG() {
-        Img_Muestra.setImageResource(lista_articulos[centinela].foto_genero.text)
-        lbl_Titulo_Libro.setText(lista_articulos[centinela].titulo)
-        Detalle_text.setText(lista_articulos[centinela].descripcion)
+        if (lista_articulos.isEmpty()){
+            Img_Muestra.setImageResource(Foto.LIBRO_DESCONOCIDO.text)
+            lbl_Titulo_Libro.setText(R.string.TITULO_VACIO)
+            Detalle_text.setText(R.string.DESCRIPCION_VACIA)
+        }else{
+            Img_Muestra.setImageResource(lista_articulos[centinela].foto_genero.text)
+            lbl_Titulo_Libro.setText(lista_articulos[centinela].titulo)
+            Detalle_text.setText(lista_articulos[centinela].descripcion)
+        }
     }
 
 

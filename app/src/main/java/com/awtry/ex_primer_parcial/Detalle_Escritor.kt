@@ -15,7 +15,7 @@ class Detalle_Escritor(
 ) : Parcelable {
 
     companion object {
-        val articulo = arrayListOf(
+        val articulo = mutableListOf(
             Detalle_Escritor(
                 Persona.ESCRITOR_ZHONGLI,
                 Foto.GEOGRAFIA,
