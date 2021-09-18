@@ -14,7 +14,7 @@ class Generos(
 ): Parcelable {
 
     companion object{
-        val generos = arrayListOf(
+        val generos = mutableListOf(
             Generos(Foto.MATEMATICA,"Matemática","Para el estudiante promedio"),
             Generos(Foto.SEGURIDAD,"Seguridad ","Todo lo básico"),
             Generos(Foto.COMIC,"Comics","Gran variedad"),

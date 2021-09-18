@@ -23,7 +23,7 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
     private lateinit var preferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private val PREFS = "MY_PREFERENCES"
-   // private val DETALLE_LISTA = "DETALLE_LISTA"
+    // private val DETALLE_LISTA = "DETALLE_LISTA"
 
 
     private lateinit var btn_Cora_Detalle: Button
@@ -40,21 +40,22 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
     private lateinit var generos: Generos
     private lateinit var usuario: Usuario
 
-    private lateinit var vista_libros: ArrayList<Generos>
+    private lateinit var vista_libros: MutableList<Generos>
     private lateinit var lista_articulos: MutableList<Detalle_Escritor>
-    private lateinit var lista_base_articulos: MutableList<Detalle_Escritor>
+    private lateinit var lista_base_articulos: ArrayList<Detalle_Escritor>
 
     private val moshi = Moshi.Builder().build()
 
     var nom: String = ""
     var det: String = ""
+    var EX_MODE: String = ""
 
     private var lugar = 0
     private var centinela = 0
 
     //endregion
 
-    private fun Inicializador_Vista(){
+    private fun Inicializador_Vista() {
         btn_Cora_Detalle = requireView().findViewById(R.id.btn_Corazon_Detalle)
         btn_IZQ = requireView().findViewById(R.id.btn_IZQ)
         btn_DER = requireView().findViewById(R.id.btn_DER)
@@ -67,6 +68,7 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         generos = requireArguments().getParcelable("NuevoArticulo") ?: Generos()
         usuario = requireArguments().getParcelable("UsuarioSeleccionado") ?: Usuario()
         lugar = requireArguments().getInt("elemento")
+        EX_MODE = requireArguments().getString("MODO", "");
 
         preferences = requireActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
@@ -74,12 +76,12 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         Disparador_Boton_Escritor()
     }
 
-    private fun MostrarDatos(){
-        if(generos.Titulo.isEmpty() && escritor.persona != null){
+    private fun MostrarDatos() {
+        if (generos.Titulo.isEmpty()) {
             Imagen_Detalle.setImageResource(escritor.foto_genero.text)
             txv_Titulo.setText(escritor.titulo)
             txv_Detalle.setText(escritor.descripcion)
-        }else{
+        } else {
             Imagen_Detalle.setImageResource(generos.Imagen_Libro.text)
             txv_Titulo.setText(generos.Titulo)
             txv_Detalle.setText(generos.Detalle)
@@ -89,11 +91,8 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         lista_articulos = escritor.Articulos_aislados()
         vista_libros = generos.conteoGeneros()
 
-        if (escritor != null){
 
-        }
-
-        if (usuario.Nivel == Nivel_Usuario.LECTOR){
+        if (usuario.Nivel == Nivel_Usuario.LECTOR) {
             txv_Titulo.isEnabled = false
             txv_Detalle.isEnabled = false
             btn_DER.isGone = true
@@ -122,23 +121,27 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
             Rotacion_IMG_Escritor()
         }
 
-        btn_Confirm.setOnClickListener{
-            Actualizar_Articulo()
+        btn_Confirm.setOnClickListener {
+            Accion_Boton_Central()
             Guardar_arrglo(Detalle_Escritor())
             (requireActivity() as MainActivity).replaceFragment(Frag_Info_General().apply {
                 arguments = Bundle().apply {
                     putParcelable("ESCRITOR", escritor)
                     putParcelable("DATOSALIDA", usuario) //LibroSeleccionado
-
+                    //putParcelable("DETALLE", preferences)
+                   putParcelableArrayList("AUX_LIST", lista_base_articulos)
                 }
             })
         }
     }
 
-    private fun Guardar_arrglo(Salida: Detalle_Escritor?){
+    private fun Guardar_arrglo(Salida: Detalle_Escritor?) {
         editor = preferences.edit()
-        editor.putString("DETALLE_LISTA", moshi.adapter(Detalle_Escritor::class.java).toJson(Salida))
-        editor.apply()
+        editor.putString(
+            "DETALLE_LISTA",
+            moshi.adapter(Detalle_Escritor::class.java).toJson(Salida)
+        )
+        editor.commit()
     }
 
     private fun Rotacion_IMG_Escritor() {
@@ -147,29 +150,30 @@ class Frag_Detalle : Fragment(R.layout.fragment_frag__detalle) {
         txv_Detalle.setText(vista_libros[centinela].Detalle)*/
     }
 
-    private fun Actualizar_Articulo(){
-       /* lista_base_articulos.map { Detalle_Escritor(usuario.persona,
-            vista_libros[centinela].Imagen_Libro,
-            txv_Titulo.toString(),txv_Detalle.toString()) }.toSet()*/
-
-        /*escritor.Contador_Articulos().set(Detalle_Escritor(escritor.persona,
-            vista_libros[centinela].Imagen_Libro.text,txv_Titulo.toString(),txv_Detalle.toString())*/
+    private fun Accion_Boton_Central() {
 
         nom = txv_Titulo.text.toString()
         det = txv_Detalle.text.toString()
+
+        //TODO: El actualizar de escritor
+        when (EX_MODE) {
+            "AGREGAR" -> lista_base_articulos.add(
+                Detalle_Escritor(
+                    usuario.persona, vista_libros[centinela].Imagen_Libro,
+                    nom, det
+                )
+            )
+        }
+
         /*
         escritor.Contador_Articulos()[lugar] = Detalle_Escritor(usuario.persona,vista_libros[centinela].Imagen_Libro,
             nom,det)*/
 
-       /* lista_articulos[lugar] = Detalle_Escritor(usuario.persona,vista_libros[centinela].Imagen_Libro,
-            nom,det)*/
+        /* lista_articulos[lugar] = Detalle_Escritor(usuario.persona,vista_libros[centinela].Imagen_Libro,
+             nom,det)*/
 
-       /* lista_articulos.find { Detalle_Escritor(usuario.persona,vista_libros[centinela].Imagen_Libro,
-            nom,det) }*/
-
-        Detalle_Escritor.articulo[lugar] = Detalle_Escritor(usuario.persona,vista_libros[centinela].Imagen_Libro,
-            nom,det)
-
+        /* lista_articulos.find { Detalle_Escritor(usuario.persona,vista_libros[centinela].Imagen_Libro,
+             nom,det) }*/
 
 
     }

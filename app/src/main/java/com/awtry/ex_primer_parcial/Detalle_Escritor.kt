@@ -15,7 +15,7 @@ class Detalle_Escritor(
 ) : Parcelable {
 
     companion object {
-        val articulo = mutableListOf(
+        val articulo = arrayListOf(
             Detalle_Escritor(
                 Persona.ESCRITOR_ZHONGLI,
                 Foto.GEOGRAFIA,
@@ -49,6 +49,7 @@ class Detalle_Escritor(
     fun Articulos_aislados() = articulo_personalizado
 
     fun Escritor_Seleccionado(escritor: Persona) {
+        articulo_personalizado.clear()
         for (centi in 0..articulo.size-1)
             if (escritor === articulo[centi].persona) {
                 articulo_personalizado.addAll(articulo.filter { it.persona === escritor })
